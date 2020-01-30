@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'qbWalletSDK_Example' do
+  pod 'qbWalletSDK', :path => '../'
+
+  target 'qbWalletSDK_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
