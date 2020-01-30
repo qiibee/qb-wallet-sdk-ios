@@ -1,0 +1,34 @@
+{
+  "name": "qbWalletSDK",
+  "version": "0.1.0",
+  "summary": "A short description of qbWalletSDK.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/qbxelvis/qbWalletSDK",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "qbxelvis": "elvis@qiibee.ch"
+  },
+  "source": {
+    "git": "https://github.com/qbxelvis/qbWalletSDK.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "qbWalletSDK/Classes/**/*",
+  "static_framework": true,
+  "dependencies": {
+    "SwiftKeychainWrapper": [
+
+    ],
+    "Alamofire": [
+      "~> 5.0.0-rc.3"
+    ],
+    "HDWalletKit": [
+
+    ]
+  }
+}

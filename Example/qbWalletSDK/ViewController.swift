@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import qbWalletSDK
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()        
+        //Kripto.funk()
         // Do any additional setup after loading the view, typically from a nib.
     }
 

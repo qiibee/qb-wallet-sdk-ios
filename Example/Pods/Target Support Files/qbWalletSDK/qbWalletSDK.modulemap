@@ -1,0 +1,6 @@
+framework module qbWalletSDK {
+  umbrella header "qbWalletSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
