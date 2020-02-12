@@ -9,11 +9,11 @@
 import Foundation
 
 public struct Transaction: Decodable {
-    let to: Address
-    let from: Address
-    let contractAddress: Address
-    let timestamp: TimeInterval
-    let token: Token
+    public let to: Address
+    public let from: Address
+    public let contractAddress: Address
+    public let timestamp: TimeInterval
+    public let token: Token
     
     init(
         to: Address,

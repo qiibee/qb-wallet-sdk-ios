@@ -10,8 +10,8 @@
 import Foundation
 
 public struct Tokens {
-    let privateTokens: Array<Token>
-    let publicTokens: Array<Token>
+    public let privateTokens: Array<Token>
+    public let publicTokens: Array<Token>
     
     init(
         privateTokens: Array<Token>,
@@ -41,9 +41,9 @@ extension Tokens: Decodable {
 }
 
 public struct Token: Decodable {
-    let symbol: String
-    let balance: String
-    let contractAddress: Address
+    public let symbol: String
+    public let balance: String
+    public let contractAddress: Address
     
     init(
         symbol: String,

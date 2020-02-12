@@ -1,4 +1,3 @@
-
 //
 //  Constants.swift
 //  WalletSDK
@@ -15,4 +14,8 @@ final class Constants {
     static let PRIVATE_KEY = "PRIVATE_KEY"
     static let WALLET_ADDRESS = "WALLET_ADDRESS"
     static let ZERO_PREFIX = "0x0"
+}
+
+final class DecodeConstants {
+    static let contractAddress = "contractAddress"
 }

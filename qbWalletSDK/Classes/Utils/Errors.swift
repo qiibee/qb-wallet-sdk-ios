@@ -33,3 +33,8 @@ enum CryptoErrors: Error {
     case CreateMnemonicFailed
     case CreateWalletFailed
 }
+
+enum ClientEntityErrors: Error {
+    case InvalidMnemonicPhrase
+    case InvalidWalletAddress
+}

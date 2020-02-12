@@ -8,8 +8,10 @@ PODS:
     - Alamofire (~> 5.0.0-rc.3)
     - HDWalletKit
     - SwiftKeychainWrapper
+    - SwiftyJSON (~> 4.0)
   - secp256k1.swift (0.1.4)
   - SwiftKeychainWrapper (3.4.0)
+  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
   - qbWalletSDK (from `../`)
@@ -21,6 +23,7 @@ SPEC REPOS:
     - HDWalletKit
     - secp256k1.swift
     - SwiftKeychainWrapper
+    - SwiftyJSON
 
 EXTERNAL SOURCES:
   qbWalletSDK:
@@ -30,9 +33,10 @@ SPEC CHECKSUMS:
   Alamofire: ca8c0de6906873be89d6deec5c8de279e00bf872
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   HDWalletKit: 07e00d664bec925225418dd638bd86dc05fada6a
-  qbWalletSDK: a98d13552a1024413bef68f9d17ec2291ebb978a
+  qbWalletSDK: f464560dfcb6fc482a0626f8e5cbc3e94d8a9656
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
 PODFILE CHECKSUM: 65091bc39316052409907ab646b2ec0108378265
 

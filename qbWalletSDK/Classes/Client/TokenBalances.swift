@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct TokenBalances: Decodable {
-    let transactionCount: Int
-    let balances: Balances
-    let aggValue: AggregateValue
+public struct TokenBalances: Decodable {
+    public let transactionCount: Int
+    public let balances: Balances
+    public let aggValue: AggregateValue
     
     init(
         transactionCount: Int,
@@ -24,10 +24,10 @@ struct TokenBalances: Decodable {
     }
 }
 
-struct Balances {
-    let privateTokens: Array<Token>
-    let publicTokens: Array<Token>
-    let ethBalance: ETHBalance
+public struct Balances {
+    public let privateTokens: Array<Token>
+    public let publicTokens: Array<Token>
+    public let ethBalance: ETHBalance
     
     init(
         privateTokens: Array<Token>,
@@ -46,7 +46,7 @@ extension Balances: Decodable {
         case publicTokens = "public"
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: StructKeys.self)
         let privateTokensDict = try container.decode([String: TokenIntermediate].self, forKey: .privateTokens)
         let publicTokensDict = try container.decode([String: TokenIntermediate].self, forKey: .publicTokens)
@@ -58,7 +58,7 @@ extension Balances: Decodable {
                 Token(
                     symbol: key,
                     balance: value.balance,
-                    contractAddress: Address(address: value.contractAddress!)
+                    contractAddress: try Address(address: value.contractAddress!)
                 )
             )
         }
@@ -72,7 +72,7 @@ extension Balances: Decodable {
                     Token(
                         symbol: key,
                         balance: value.balance,
-                        contractAddress: Address(address: value.contractAddress!)
+                        contractAddress: try Address(address: value.contractAddress!)
                     )
                 )
             } else {
@@ -94,11 +94,11 @@ struct TokenIntermediate: Decodable {
     let balance: String
 }
 
-struct AggregateValue: Decodable {
-    let USD: Decimal
+public struct AggregateValue: Decodable {
+    public let USD: Decimal
 }
 
-struct ETHBalance: Decodable {
-    let balance: Decimal
+public struct ETHBalance: Decodable {
+    public let balance: Decimal
 }
 

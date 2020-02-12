@@ -9,49 +9,94 @@
 import Foundation
 import SwiftKeychainWrapper
 
-final public class CryptoWallet {
+final public class CryptoWallet: SDKProvider {
+    
     private init() {}
     
-//    func walletAddress() -> Result<Address, Error> {
-//        fatalError("unimplemented")
-//    }
-//
-//    func privateKey() -> Result<PrivateKey, Error> {
-//        fatalError("unimplemented")
-//    }
-//
-//    func mnemonicPhrase() -> Result<Mnemonic, Error> {
-//        fatalError("unimplemented")
-//    }
-//
-//    func createWallet() -> Result<Address, Error> {
-//        fatalError("unimplemented")
-//    }
-//
-//    func restoreWallet(mnemonic: Mnemonic) -> Result<Address, Error> {
-//        fatalError("unimplemented")
-//    }
-//
-//    func removeWallet() -> Result<(), Error> {
-//        fatalError("unimplemented")
-//    }
-//
-//    func getBalances(responseHandler: (Result<TokenBalances, Error>) -> ()) {
-//        fatalError("unimplemented")
-//    }
-//
-//    public static func getTokens(responseHandler: @escaping (Result<Tokens, Error>) -> ()) {
-//        let address = Address(address:"0xF7D2467a2b55eDe32A5EF074F3FC4521Fdf29064")
-//        ApiService.getTokens(address: address, responseHandler: responseHandler)
-//    }
-//
-//    func getTransactions(responseHandler: (Result<Array<Transaction>, Error>) -> ()) {
-//        fatalError("unimplemented")
-//    }
-//
-//    func sendTransaction(toAddress: Address, contractAddress: Address, sendTokenValue: Decimal, responseHandler: (Result<Hash, Error>) -> ()) {
-//        fatalError("unimplemented")
-//    }
+    public static func walletAddress() -> Result<Address, Error> {
+         StorageService.walletAddress()
+    }
+
+    public static func privateKey() -> Result<PrivateKey, Error> {
+        StorageService.privateKey()
+    }
+
+    public static func mnemonicPhrase() -> Result<Mnemonic, Error> {
+        StorageService.mnemonicPhrase()
+    }
+
+    public static func createWallet() -> Result<Wallet, Error> {
+        switch CryptoService.createMnemonic() {
+            case .success(let mnemonic):
+                return handleWalletCreation(mnemonic: mnemonic)
+            case .failure(let error):
+                return .failure(error)
+        }
+    }
+
+    public static func restoreWallet(mnemonic: Mnemonic) -> Result<Wallet, Error> {
+        handleWalletCreation(mnemonic: mnemonic)
+    }
+
+    public static func removeWallet() -> Result<(), Error> {
+        StorageService.removeWallet()
+    }
+
+    public static func getBalances(responseHandler: @escaping (Result<TokenBalances, Error>) -> ()) {
+        switch StorageService.walletAddress() {
+           case .success(let address):
+                ApiService.getBalances(address: address, responseHandler: responseHandler)
+        case .failure(let err): responseHandler(.failure(err))
+        }
+        
+    }
+
+    public static func getTokens(responseHandler: @escaping (Result<Tokens, Error>) -> ()) {
+        switch StorageService.walletAddress() {
+            case .success(let address):
+                ApiService.getTokens(address: address, responseHandler: responseHandler)
+            case .failure(let err): responseHandler(.failure(err))
+        }
+    }
+
+    public static func getTransactions(responseHandler: @escaping (Result<Array<Transaction>, Error>) -> ()) {
+        switch StorageService.walletAddress() {
+            case .success(let address):
+                ApiService.getTransactions(address: address, responseHandler: responseHandler)
+            case .failure(let err): responseHandler(.failure(err))
+        }
+    }
+    
+    public static func sendTransaction(toAddress: Address, contractAddress: Address, sendTokenValue: Decimal, responseHandler: @escaping (Result<String, Error>) -> ()) {
+        switch StorageService.walletAddress() {
+            case .success(let address):
+                ApiService.getRawTransaction(fromAddress: address, toAddress: toAddress, contractAddress: contractAddress, sendTokenValue: sendTokenValue, responseHandler: { result in
+                
+                    switch result {
+                        case .success(let rawTx): ApiService.sendSignedTransaction(signedTx: rawTx, responseHandler: responseHandler)
+                        case .failure(let err): responseHandler(.failure(err))
+                    }
+                
+                })
+            case .failure(let err): responseHandler(.failure(err))
+        }
+    }
+    
+    static func handleWalletCreation(mnemonic: Mnemonic) -> Result<Wallet, Error> {
+        let walletResult = CryptoService.createWallet(mnemonic: mnemonic)
+        switch storeWalletOnCreation(walletResult: walletResult) {
+            case .success(): return walletResult
+            case .failure(let err): return .failure(err)
+        }
+    }
+    
+    static func storeWalletOnCreation(walletResult: Result<Wallet, Error>) -> Result<(), Error> {
+        switch walletResult {
+            case .success(let wallet):
+                return StorageService.storeWalletDetails(address: wallet.publicKey, privateKey: wallet.privateKey, mnemonic: wallet.mnemonic)
+            case .failure(let err): return .failure(err)
+        }
+    }
     
 }
     

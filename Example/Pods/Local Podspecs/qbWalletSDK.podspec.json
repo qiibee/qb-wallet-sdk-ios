@@ -16,7 +16,7 @@
     "tag": "0.1.0"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "12.0"
   },
   "source_files": "qbWalletSDK/Classes/**/*",
   "static_framework": true,
@@ -29,6 +29,9 @@
     ],
     "HDWalletKit": [
 
+    ],
+    "SwiftyJSON": [
+      "~> 4.0"
     ]
   }
 }

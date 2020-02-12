@@ -10,33 +10,33 @@ import Foundation
 
 internal protocol SDKProvider {
     // Storage related
-    func walletAddress() -> Result<Address, Error>
-    func privateKey() -> Result<PrivateKey, Error>
-    func mnemonicPhrase() -> Result<Mnemonic, Error>
+    static func walletAddress() -> Result<Address, Error>
+    static func privateKey() -> Result<PrivateKey, Error>
+    static func mnemonicPhrase() -> Result<Mnemonic, Error>
     
     // Wallet related
-    func createWallet() -> Result<Address, Error>
-    func restoreWallet(mnemonic: Mnemonic) -> Result<Address, Error>
-    func removeWallet() -> Result<(), Error>
+    static func createWallet() -> Result<Wallet, Error>
+    static func restoreWallet(mnemonic: Mnemonic) -> Result<Wallet, Error>
+    static func removeWallet() -> Result<(), Error>
     
     // Backend API related
-    func getBalances(
-        responseHandler: (_ result: Result<TokenBalances, Error>) -> ()
+    static func getBalances(
+        responseHandler: @escaping  (_ result: Result<TokenBalances, Error>) -> ()
     )
     
     static func getTokens(
         responseHandler: @escaping (_ result: Result<Tokens, Error>) -> ()
     )
     
-    func getTransactions(
-        responseHandler: (_ result: Result<Array<Transaction>, Error>) -> ()
+    static func getTransactions(
+        responseHandler: @escaping (_ result: Result<Array<Transaction>, Error>) -> ()
     )
     
-    func sendTransaction(
+    static func sendTransaction(
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Decimal,
-        responseHandler: (_ result: Result<Hash, Error>) -> ()
+        responseHandler:  @escaping (_ result: Result<String, Error>) -> ()
     )
     
 }

@@ -8,47 +8,50 @@
 
 import Foundation
 
-struct Address: Decodable {
-    let address: String
+public struct Address: Decodable {
+    public let address: String
     
-    init(address: String) {
-        // TODO check is address correct
-        self.address = address
+    public init(address: String) throws {
+        if (Assertion.isValidAddress(address: address)) {
+            self.address = address
+        } else {
+            throw ClientEntityErrors.InvalidWalletAddress
+        }
+        
     }
 }
 
-struct PrivateKey {
-    let privateKey: String
+public struct PrivateKey {
+    public let privateKey: String
     
-    init(privateKey: String) {
-        // TODO check is privateKey correct
+    public init(privateKey: String) {
         self.privateKey = privateKey
     }
 }
 
-struct Mnemonic {
-    let phrase: String
+public struct Mnemonic {
+    public let phrase: String
     
-    init(phrase: String) {
-        // TODO check is phrase correct
-        self.phrase = phrase
+    public init(phrase: String) throws {
+        if (Assertion.isValidMnemonic(phrase: phrase)) {
+            self.phrase = phrase
+        } else {
+            throw ClientEntityErrors.InvalidMnemonicPhrase
+        }
+        
     }
 }
 
-struct Hash: Decodable {
+public struct Wallet {
+    public let privateKey: String
+    public let publicKey: String
+    public let mnemonic: String
     
-}
-
-struct Wallet {
-    let privateKey: String
-    let publicKey: String
-    let mnemonic: String
-    
-    init(
+    public init(
         privateKey: String,
         publicKey: String,
         mnemonic: String
-        ) {
+    ) {
         self.publicKey = publicKey
         self.privateKey = privateKey
         self.mnemonic = mnemonic
