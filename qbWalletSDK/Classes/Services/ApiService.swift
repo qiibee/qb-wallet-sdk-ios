@@ -113,18 +113,14 @@ internal final class ApiService: HttpClient {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    do {
-                        let json = value as! Data
-                        let hash = try JSONDecoder().decode(String.self, from: json)
-                        responseHandler(.success(hash))
-                    } catch {
-                        responseHandler(.failure(JSONParseErrors.ParseHashFailed))
-                    }
+                    responseHandler(
+                        JsonDeserialization.decodeSendTxResponse(json: JSON(value))
+                    )
                 case .failure(let error):
                     responseHandler(
                         .failure(
                             HTTPErrors.PostRequestFailed(message:
-                                error.errorDescription ?? "Get transactions failed"
+                                error.errorDescription ?? "Post transaction failed"
                             )
                         )
                     )
@@ -137,6 +133,7 @@ internal final class ApiService: HttpClient {
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Decimal,
+        privateKey: PrivateKey,
         responseHandler: @escaping (Result<String, Error>) -> ()
         ) {
         
@@ -157,7 +154,10 @@ internal final class ApiService: HttpClient {
                 switch response.result {
                 case .success(let value):
                     responseHandler(
-                        JsonDeserialization.decodeRawTransaction(json: JSON(value), weiValue: weiValue)
+                        JsonDeserialization.decodeRawTransaction(
+                            json: JSON(value),
+                            privateKey: privateKey
+                        )
                     )
                 case .failure(let error):
                     responseHandler(

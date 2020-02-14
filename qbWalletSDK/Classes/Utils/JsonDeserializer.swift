@@ -90,7 +90,7 @@ class JsonDeserialization {
         return .success(Tokens(privateTokens: privateTokens, publicTokens: publicTokens))
     }
     
-    static func decodeRawTransaction(json: JSON, weiValue: String) -> Result<String, Error> {
+    static func decodeRawTransaction(json: JSON, privateKey: PrivateKey) -> Result<String, Error> {
         let data = json.dictionaryValue
         
         guard let txData = (data["data"]?.stringValue),
@@ -107,20 +107,29 @@ class JsonDeserialization {
         let fGasPrice = hexToInt(value: gasPrice)
         let fGasLimit = hexToInt(value: gasLimit)
         let fNonce = hexToInt(value: nonce)
+        let fValue = hexToInt(value: value)
         
         let rawTransaction = EthereumRawTransaction(
-            value: Wei(weiValue)!,
+            value: Wei(fValue),
             to: to,
             gasPrice: fGasPrice,
             gasLimit: fGasLimit,
             nonce: fNonce,
-            data: Data(txData.utf8)
+            data: Data(hex: txData)
         )
-        guard let signed = try? signer.hash(rawTransaction: rawTransaction).toHexString() else {
+        
+        guard let pk = HDPrivateKey(pk: privateKey.privateKey, coin: .ethereum) else {
             return .failure(JSONParseErrors.ParseRawTxFailed)
         }
         
-        return .success(signed)
+        guard let signed = try? signer.sign(
+            rawTransaction,
+            privateKey: pk
+        ).toHexString() else {
+            return .failure(JSONParseErrors.ParseRawTxFailed)
+        }
+        
+        return .success("0x" + signed)
     }
     
     static func decodeTransactions(json: JSON) -> Result<[Transaction], Error> {
@@ -156,6 +165,16 @@ class JsonDeserialization {
         }
         
         return .success(transactions)
+    }
+    
+    static func decodeSendTxResponse(json: JSON) -> Result<String, Error> {
+        let data = json.dictionaryValue
+        
+        guard let hash = data["hash"]?.stringValue else {
+            return .failure(JSONParseErrors.ParseSendTxResponseFailed)
+        }
+        
+        return .success(hash)
     }
     
     private static func decodeToken(json: [String: JSON]) -> Result<Token, Error> {

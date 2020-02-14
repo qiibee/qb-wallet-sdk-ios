@@ -17,7 +17,7 @@ public enum JSONParseErrors: Error {
     case ParseTokensFailed
     case ParseBalancesFailed
     case ParseTransactionsFailed
-    case ParseHashFailed
+    case ParseSendTxResponseFailed
     case ParseRawTxFailed
     case ParseTokenFailed
 }

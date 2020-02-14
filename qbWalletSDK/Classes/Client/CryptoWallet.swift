@@ -70,15 +70,40 @@ final public class CryptoWallet: SDKProvider {
     public static func sendTransaction(toAddress: Address, contractAddress: Address, sendTokenValue: Decimal, responseHandler: @escaping (Result<String, Error>) -> ()) {
         switch StorageService.walletAddress() {
             case .success(let address):
-                ApiService.getRawTransaction(fromAddress: address, toAddress: toAddress, contractAddress: contractAddress, sendTokenValue: sendTokenValue, responseHandler: { result in
-                
+                getRawTx(
+                    toAddress: toAddress,
+                    contractAddress: contractAddress,
+                    sendTokenValue: sendTokenValue,
+                    responseHandler: { result in
                     switch result {
-                        case .success(let rawTx): ApiService.sendSignedTransaction(signedTx: rawTx, responseHandler: responseHandler)
+                        case .success(let rawTx): ApiService.sendSignedTransaction(
+                            signedTx: rawTx,
+                            responseHandler: responseHandler
+                        )
                         case .failure(let err): responseHandler(.failure(err))
                     }
-                
                 })
             case .failure(let err): responseHandler(.failure(err))
+        }
+    }
+    
+    static func getRawTx(
+        toAddress: Address,
+        contractAddress: Address,
+        sendTokenValue: Decimal,
+        responseHandler: @escaping (Result<String, Error>) -> ()
+    ) -> () {
+        switch (StorageService.walletAddress(), StorageService.privateKey()) {
+            case (.success(let address), .success(let privateKey)):
+                ApiService.getRawTransaction(
+                    fromAddress: address,
+                    toAddress: toAddress,
+                    contractAddress: contractAddress,
+                    sendTokenValue: sendTokenValue,
+                    privateKey: privateKey,
+                    responseHandler:responseHandler
+                )
+            case _: responseHandler(.failure(StorageErrors.WalletAddressEmpty))
         }
     }
     
