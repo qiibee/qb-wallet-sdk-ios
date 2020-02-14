@@ -8,20 +8,21 @@
 
 import Foundation
 
-enum HTTPErrors: Error {
+public enum HTTPErrors: Error {
     case GetRequestFailed(message: String)
     case PostRequestFailed(message: String)
 }
 
-enum JSONParseErrors: Error {
+public enum JSONParseErrors: Error {
     case ParseTokensFailed
     case ParseBalancesFailed
     case ParseTransactionsFailed
     case ParseHashFailed
     case ParseRawTxFailed
+    case ParseTokenFailed
 }
 
-enum StorageErrors: Error {
+public enum StorageErrors: Error {
     case MnemonicPhraseEmpty
     case PrivateKeyEmpty
     case WalletAddressEmpty
@@ -29,12 +30,12 @@ enum StorageErrors: Error {
     case RemoveWalletFailed
 }
 
-enum CryptoErrors: Error {
+public enum CryptoErrors: Error {
     case CreateMnemonicFailed
     case CreateWalletFailed
 }
 
-enum ClientEntityErrors: Error {
+public enum ClientEntityErrors: Error {
     case InvalidMnemonicPhrase
     case InvalidWalletAddress
 }

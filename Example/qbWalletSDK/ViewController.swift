@@ -14,21 +14,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let walletAddress = "0xbBf0458e845E1fd7EEfAd6d5689b13A3E3312510"
-        let mnemo = try! Mnemonic(phrase: "payment under burden bus short process film book crazy uniform hair mercy")
-        
-        let res = Wallet.getWalletAddress()
-        log(value: "result is")
-        log(value: res)
-        Wallet.getBalances()
-        
     }
     
-    func log(value: String) {
-        os_log("LOG: %s", log: OSLog.myLogs, type: .info, value)
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -87,12 +74,27 @@ class Wallet {
     }
     
     static func getBalances() {
-        CryptoWallet.getTokens(responseHandler: { result in
+        CryptoWallet.getBalances(responseHandler: { result in
           switch result {
-          case .success(let transactions): log(value: "\(transactions.count)")
+          case .success(let balances): log(value: "\(balances.balances.privateTokens.count)")
           case .failure(let err): log(value: "\(err)")
             }
         })
+    }
+    
+    static func sendTransaction() {
+        CryptoWallet.sendTransaction(
+            toAddress: try! Address(address: "0xbBf0458e845E1fd7EEfAd6d5689b13A3E3312510"),
+            contractAddress: try! Address(address: "0xf2e71f41e670c2823684ac3dbdf48166084e5af3"),
+            sendTokenValue: 1.1,
+            responseHandler: { result in
+                switch result {
+                    case .success(let raw): log(value: "\(raw)")
+                    case .failure(let err): log(value: "\(err)")
+                }
+                
+            }
+        )
     }
     
     static func log(value: String) {

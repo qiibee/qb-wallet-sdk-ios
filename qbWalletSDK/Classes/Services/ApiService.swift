@@ -29,13 +29,9 @@ internal final class ApiService: HttpClient {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    do {
-                        //let json = value as! Data
-                        let balances = try JSONDecoder().decode(TokenBalances.self, from: value as! Data)
-                        responseHandler(.success(balances))
-                    } catch {
-                        responseHandler(.failure(JSONParseErrors.ParseBalancesFailed))
-                    }
+                    responseHandler(
+                        JsonDeserialization.decodeBalances(json: JSON(value))
+                    )
                 case .failure(let error):
                     responseHandler(
                         .failure(
@@ -61,13 +57,9 @@ internal final class ApiService: HttpClient {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    do {
-                        let json = value as! Data
-                        let tokens = try JSONDecoder().decode(Tokens.self, from: json)
-                        responseHandler(.success(tokens))
-                    } catch {
-                        responseHandler(.failure(JSONParseErrors.ParseTokensFailed))
-                    }
+                    responseHandler(
+                        JsonDeserialization.decodeToknes(json: JSON(value))
+                    )
                 case .failure(let error):
                     responseHandler(
                         .failure(
@@ -151,7 +143,7 @@ internal final class ApiService: HttpClient {
         let weiValue = "\(sendTokenValue * 1000000000000000000)"
         
         AF.request(
-            "\(ApiService.QB_API)/transactions/row",
+            "\(ApiService.QB_API)/transactions/raw",
             parameters: [
                 "from": fromAddress.address,
                 "to": toAddress.address,
@@ -164,13 +156,9 @@ internal final class ApiService: HttpClient {
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    do {
-                        let json = value as! Data
-                        let rawTx = try JSONDecoder().decode(String.self, from: json)
-                        responseHandler(.success(rawTx))
-                    } catch {
-                        responseHandler(.failure(JSONParseErrors.ParseRawTxFailed))
-                    }
+                    responseHandler(
+                        JsonDeserialization.decodeRawTransaction(json: JSON(value), weiValue: weiValue)
+                    )
                 case .failure(let error):
                     responseHandler(
                         .failure(
