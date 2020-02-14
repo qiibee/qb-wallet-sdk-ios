@@ -30,7 +30,7 @@ extension OSLog {
     static let myLogs = OSLog(subsystem: subsystem, category: "myLogs")
 }
 
-class Wallet {
+class WalletSDK {
     static func getWalletAddress() -> String {
         switch CryptoWallet.walletAddress()  {
             case .success(let address): return address.address
