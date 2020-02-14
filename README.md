@@ -20,10 +20,6 @@ it, simply add the following line to your Podfile:
 pod 'qbWalletSDK'
 ```
 
-## Author
-
-qbxelvis, elvis@qiibee.ch
-
 ## License
 
 qbWalletSDK is available under the MIT license. See the LICENSE file for more info.
