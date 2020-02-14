@@ -41,10 +41,10 @@ public struct Balances {
 }
 
 public struct AggregateValue {
-    public let USD: Decimal
+    public let USD: String
 }
 
 public struct ETHBalance {
-    public let balance: Decimal
+    public let balance: String
 }
 

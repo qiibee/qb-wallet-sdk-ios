@@ -22,15 +22,15 @@ internal final class JsonDeserialization {
         
         var privateTokens: [Token] = []
         var publicTokens: [Token] = []
-        var ethBalance = Decimal(0.0)
+        var ethBalance = "0"
         
         for (key, value) in publicTokensData {
             if (key == Constants.ETH) {
                 guard let tempEth = value.dictionaryValue["balance"]?.stringValue else {
                     return .failure(JSONParseErrors.ParseBalancesFailed)
                 }
+                ethBalance = tempEth
                 
-                ethBalance = Decimal(string: tempEth) ?? 0.0
             } else {
                 switch decodeTokenFromBalances(symbol: key, data: value.dictionaryValue) {
                     case .success(let token): publicTokens.append(token)
@@ -46,8 +46,6 @@ internal final class JsonDeserialization {
             }
         }
         
-        let usd = Decimal(string: USD) ?? 0.0        
-        
         return .success(
             TokenBalances(
                 transactionCount: Int(truncating: transactionCount),
@@ -56,7 +54,7 @@ internal final class JsonDeserialization {
                     publicTokens: publicTokens,
                     ethBalance: ETHBalance(balance: ethBalance)
                 ),
-                aggValue: AggregateValue(USD: usd)
+                aggValue: AggregateValue(USD: USD)
             )
         )
     }
