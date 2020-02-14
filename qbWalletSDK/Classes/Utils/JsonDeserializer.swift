@@ -180,7 +180,7 @@ internal final class JsonDeserialization {
     private static func decodeToken(json: [String: JSON]) -> Result<Token, Error> {
         
         guard let symbol = json["symbol"]?.stringValue,
-            let contractAddress = json[DecodeConstants.contractAddress]?.stringValue else {
+            let contractAddress = json["contractAddress"]?.stringValue else {
             return .failure(JSONParseErrors.ParseTokenFailed)
         }
         
@@ -195,7 +195,7 @@ internal final class JsonDeserialization {
     
     private static func decodeTokenFromBalances(symbol: String, data: [String:JSON]) -> Result<Token, Error> {
         guard let balance = data["balance"]?.stringValue,
-            let contractAddress = data[DecodeConstants.contractAddress]?.stringValue else {
+            let contractAddress = data["contractAddress"]?.stringValue else {
                 return .failure(JSONParseErrors.ParseBalancesFailed)
         }
                     
