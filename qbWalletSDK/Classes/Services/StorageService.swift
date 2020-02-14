@@ -44,14 +44,11 @@ internal final class StorageService: StorageProvider {
         }
     }
     
-    static func storeWalletDetails(
-        address: String,
-        privateKey: String,
-        mnemonic: String
-    ) -> Result<(), Error> {
-        let success1 = KeychainWrapper.standard.set(mnemonic, forKey: Constants.MNEMONIC_PHRASE)
-        let success2 = KeychainWrapper.standard.set(privateKey, forKey: Constants.PRIVATE_KEY)
-        let success3 = KeychainWrapper.standard.set(address, forKey: Constants.WALLET_ADDRESS)
+    static func storeWalletDetails(wallet: Wallet) -> Result<(), Error> {
+        
+        let success1 = KeychainWrapper.standard.set(wallet.mnemonic.phrase, forKey: Constants.MNEMONIC_PHRASE)
+        let success2 = KeychainWrapper.standard.set(wallet.privateKey.privateKey, forKey: Constants.PRIVATE_KEY)
+        let success3 = KeychainWrapper.standard.set(wallet.publicKey.address, forKey: Constants.WALLET_ADDRESS)
         
         if (success1 == true && success2 == true && success3 == true) {
             return .success(())

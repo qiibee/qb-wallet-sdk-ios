@@ -12,11 +12,7 @@ internal protocol StorageProvider {
     static func walletAddress() -> Result<Address, Error>
     static func privateKey() -> Result<PrivateKey, Error>
     static func mnemonicPhrase() -> Result<Mnemonic, Error>
-    static func storeWalletDetails(
-        address: String,
-        privateKey: String,
-        mnemonic: String
-    ) -> Result<(), Error>
+    static func storeWalletDetails(wallet: Wallet) -> Result<(), Error>
     static func removeWallet() -> Result<(), Error>
 }
 

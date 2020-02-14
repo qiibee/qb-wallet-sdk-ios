@@ -50,14 +50,14 @@ public struct Mnemonic {
 }
 
 public struct Wallet {
-    public let privateKey: String
-    public let publicKey: String
-    public let mnemonic: String
+    public let privateKey: PrivateKey
+    public let publicKey: Address
+    public let mnemonic: Mnemonic
     
     public init(
-        privateKey: String,
-        publicKey: String,
-        mnemonic: String
+        privateKey: PrivateKey,
+        publicKey: Address,
+        mnemonic: Mnemonic
     ) {
         self.publicKey = publicKey
         self.privateKey = privateKey

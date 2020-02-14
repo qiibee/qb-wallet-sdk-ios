@@ -126,11 +126,7 @@ final public class CryptoWallet: SDKProvider {
     static func storeWalletOnCreation(walletResult: Result<Wallet, Error>) -> Result<(), Error> {
         switch walletResult {
             case .success(let wallet):
-                return StorageService.storeWalletDetails(
-                    address: wallet.publicKey, 
-                    privateKey: wallet.privateKey,
-                    mnemonic: wallet.mnemonic
-                )
+                return StorageService.storeWalletDetails(wallet: wallet)
             case .failure(let err): return .failure(err)
         }
     }    

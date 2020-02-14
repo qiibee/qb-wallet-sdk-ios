@@ -34,9 +34,9 @@ internal final class CryptoService: CryptoProvider {
             let address = pk.publicKey.address
             
             return .success(Wallet(
-                privateKey: pk.raw.dataToHexString(),
-                publicKey: address,
-                mnemonic: mnemonic.phrase
+                privateKey: PrivateKey(privateKey: pk.raw.dataToHexString()),
+                publicKey: try Address(address: address),
+                mnemonic: mnemonic
             ))
         } catch {
             return .failure(CryptoErrors.CreateWalletFailed)
