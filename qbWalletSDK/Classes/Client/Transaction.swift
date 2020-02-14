@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Transaction: Decodable {
+public struct Transaction {
     public let to: Address
     public let from: Address
     public let contractAddress: Address

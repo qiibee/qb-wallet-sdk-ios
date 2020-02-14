@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Address: Decodable {
+public struct Address {
     public let address: String
     
     public init(address: String) throws {

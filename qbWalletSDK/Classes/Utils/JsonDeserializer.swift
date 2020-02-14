@@ -2,7 +2,7 @@ import Foundation
 import SwiftyJSON
 import HDWalletKit
 
-class JsonDeserialization {
+internal final class JsonDeserialization {
     private init() {}
     
     static func decodeBalances(json: JSON) -> Result<TokenBalances, Error> {
@@ -180,16 +180,14 @@ class JsonDeserialization {
     private static func decodeToken(json: [String: JSON]) -> Result<Token, Error> {
         
         guard let symbol = json["symbol"]?.stringValue,
-            let contractAddress = json[DecodeConstants.contractAddress]?.stringValue
-        else {
+            let contractAddress = json[DecodeConstants.contractAddress]?.stringValue else {
             return .failure(JSONParseErrors.ParseTokenFailed)
         }
         
         guard let token = try? Token(
             symbol: symbol,
             balance: json["balance"]?.stringValue ?? "0",
-            contractAddress: Address(address: contractAddress))
-        else {
+            contractAddress: Address(address: contractAddress)) else {
             return .failure(JSONParseErrors.ParseTokenFailed)
         }
         return .success(token)
@@ -205,8 +203,8 @@ class JsonDeserialization {
             symbol: symbol,
             balance: balance,
             contractAddress: Address(address: contractAddress)
-            ) else {
-                return .failure(JSONParseErrors.ParseBalancesFailed)
+        ) else {
+            return .failure(JSONParseErrors.ParseBalancesFailed)
         }
         
         return .success(token)

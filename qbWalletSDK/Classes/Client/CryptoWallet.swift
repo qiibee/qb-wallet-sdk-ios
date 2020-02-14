@@ -42,16 +42,20 @@ final public class CryptoWallet: SDKProvider {
         StorageService.removeWallet()
     }
 
-    public static func getBalances(responseHandler: @escaping (Result<TokenBalances, Error>) -> ()) {
+    public static func getBalances(
+        responseHandler: @escaping (Result<TokenBalances, Error>) -> ()
+    ) -> () {
         switch StorageService.walletAddress() {
-           case .success(let address):
+            case .success(let address):
                 ApiService.getBalances(address: address, responseHandler: responseHandler)
-        case .failure(let err): responseHandler(.failure(err))
+            case .failure(let err): responseHandler(.failure(err))
         }
         
     }
 
-    public static func getTokens(responseHandler: @escaping (Result<Tokens, Error>) -> ()) {
+    public static func getTokens(
+        responseHandler: @escaping (Result<Tokens, Error>) -> ()
+    ) -> () {
         switch StorageService.walletAddress() {
             case .success(let address):
                 ApiService.getTokens(address: address, responseHandler: responseHandler)
@@ -59,7 +63,9 @@ final public class CryptoWallet: SDKProvider {
         }
     }
 
-    public static func getTransactions(responseHandler: @escaping (Result<Array<Transaction>, Error>) -> ()) {
+    public static func getTransactions(
+        responseHandler: @escaping (Result<Array<Transaction>, Error>) -> ()
+    ) -> () {
         switch StorageService.walletAddress() {
             case .success(let address):
                 ApiService.getTransactions(address: address, responseHandler: responseHandler)
@@ -67,7 +73,12 @@ final public class CryptoWallet: SDKProvider {
         }
     }
     
-    public static func sendTransaction(toAddress: Address, contractAddress: Address, sendTokenValue: Decimal, responseHandler: @escaping (Result<String, Error>) -> ()) {
+    public static func sendTransaction(
+        toAddress: Address,
+        contractAddress: Address, 
+        sendTokenValue: Decimal, 
+        responseHandler: @escaping (Result<String, Error>) -> ()
+    ) -> () {
         switch StorageService.walletAddress() {
             case .success(let address):
                 getRawTx(
@@ -75,14 +86,15 @@ final public class CryptoWallet: SDKProvider {
                     contractAddress: contractAddress,
                     sendTokenValue: sendTokenValue,
                     responseHandler: { result in
-                    switch result {
-                        case .success(let rawTx): ApiService.sendSignedTransaction(
-                            signedTx: rawTx,
-                            responseHandler: responseHandler
-                        )
-                        case .failure(let err): responseHandler(.failure(err))
+                        switch result {
+                            case .success(let rawTx): ApiService.sendSignedTransaction(
+                                signedTx: rawTx,
+                                responseHandler: responseHandler
+                            )
+                            case .failure(let err): responseHandler(.failure(err))
+                        }
                     }
-                })
+                )
             case .failure(let err): responseHandler(.failure(err))
         }
     }
@@ -118,10 +130,13 @@ final public class CryptoWallet: SDKProvider {
     static func storeWalletOnCreation(walletResult: Result<Wallet, Error>) -> Result<(), Error> {
         switch walletResult {
             case .success(let wallet):
-                return StorageService.storeWalletDetails(address: wallet.publicKey, privateKey: wallet.privateKey, mnemonic: wallet.mnemonic)
+                return StorageService.storeWalletDetails(
+                    address: wallet.publicKey, 
+                    privateKey: wallet.privateKey,
+                    mnemonic: wallet.mnemonic
+                )
             case .failure(let err): return .failure(err)
         }
-    }
-    
+    }    
 }
     

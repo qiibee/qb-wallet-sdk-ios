@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Constants {
+internal final class Constants {
     static let ETH = "ETH"
     static let MNEMONIC_PHRASE = "MNEMONIC_PHRASE"
     static let PRIVATE_KEY = "PRIVATE_KEY"
@@ -16,6 +16,6 @@ final class Constants {
     static let ZERO_PREFIX = "0x0"
 }
 
-final class DecodeConstants {
+internal final class DecodeConstants {
     static let contractAddress = "contractAddress"
 }
