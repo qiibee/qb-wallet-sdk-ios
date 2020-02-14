@@ -167,14 +167,14 @@ internal final class JsonDeserialization {
         return .success(transactions)
     }
     
-    static func decodeSendTxResponse(json: JSON) -> Result<String, Error> {
+    static func decodeSendTxResponse(json: JSON) -> Result<Hash, Error> {
         let data = json.dictionaryValue
         
         guard let hash = data["hash"]?.stringValue else {
             return .failure(JSONParseErrors.ParseSendTxResponseFailed)
         }
         
-        return .success(hash)
+        return .success(Hash(hash: hash))
     }
     
     private static func decodeToken(json: [String: JSON]) -> Result<Token, Error> {

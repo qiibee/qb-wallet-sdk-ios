@@ -36,7 +36,7 @@ internal protocol SDKProvider {
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Decimal,
-        responseHandler:  @escaping (_ result: Result<String, Error>) -> ()
+        responseHandler:  @escaping (_ result: Result<Hash, Error>) -> ()
     )
     
 }

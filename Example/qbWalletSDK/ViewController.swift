@@ -89,7 +89,7 @@ class Wallet {
             sendTokenValue: 1.1,
             responseHandler: { result in
                 switch result {
-                    case .success(let raw): log(value: "\(raw)")
+                case .success(let hashTx): log(value: "\(hashTx.hash)")
                     case .failure(let err): log(value: "\(err)")
                 }
                 

@@ -8,6 +8,13 @@
 
 import Foundation
 
+public struct Hash {
+    public let hash: String
+    public init(hash: String) {
+        self.hash = hash
+    }
+}
+
 public struct Address {
     public let address: String
     

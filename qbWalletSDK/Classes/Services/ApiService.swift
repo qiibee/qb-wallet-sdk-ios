@@ -92,7 +92,7 @@ internal final class ApiService: HttpClient {
     
     static func sendSignedTransaction(
         signedTx: String,
-        responseHandler: @escaping (Result<String, Error>) -> ()
+        responseHandler: @escaping (Result<Hash, Error>) -> ()
     ) -> () {
         AF.request(
             "\(ApiService.QB_API)/transactions",
