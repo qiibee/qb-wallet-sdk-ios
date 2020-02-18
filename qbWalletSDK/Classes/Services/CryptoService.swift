@@ -14,7 +14,7 @@ import struct HDWalletKit.PrivateKey
 typealias HDMnemonic = HDWalletKit.Mnemonic
 typealias HDPrivateKey = HDWalletKit.PrivateKey
 
-internal class CryptoService: CryptoProvider {
+internal final class CryptoService: CryptoProvider {
     
     private init() {}
     
@@ -31,13 +31,12 @@ internal class CryptoService: CryptoProvider {
     static func createWallet(mnemonic: Mnemonic) -> Result<Wallet, Error> {
         do {
             let pk = CryptoService.deriveWallet(mnemonic: mnemonic)
-            
             let address = pk.publicKey.address
             
             return .success(Wallet(
-                privateKey: pk.raw.dataToHexString(),
-                publicKey: address,
-                mnemonic: mnemonic.phrase
+                privateKey: PrivateKey(privateKey: pk.raw.dataToHexString()),
+                publicKey: try Address(address: address),
+                mnemonic: mnemonic
             ))
         } catch {
             return .failure(CryptoErrors.CreateWalletFailed)

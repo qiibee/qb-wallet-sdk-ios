@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Assertion {
+internal final class Assertion {
     
     public static func isValidAddress(address: String) -> Bool {
         

@@ -26,7 +26,7 @@ internal protocol HttpClient {
     
     static func sendSignedTransaction(
         signedTx: String,
-        responseHandler: @escaping (_ result: Result<String, Error>) -> ()
+        responseHandler: @escaping (_ result: Result<Hash, Error>) -> ()
     )    
     
     static func getRawTransaction(

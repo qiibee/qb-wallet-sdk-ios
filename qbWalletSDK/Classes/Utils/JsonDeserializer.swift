@@ -2,7 +2,7 @@ import Foundation
 import SwiftyJSON
 import HDWalletKit
 
-class JsonDeserialization {
+internal final class JsonDeserialization {
     private init() {}
     
     static func decodeBalances(json: JSON) -> Result<TokenBalances, Error> {
@@ -22,15 +22,15 @@ class JsonDeserialization {
         
         var privateTokens: [Token] = []
         var publicTokens: [Token] = []
-        var ethBalance = Decimal(0.0)
+        var ethBalance = "0"
         
         for (key, value) in publicTokensData {
             if (key == Constants.ETH) {
                 guard let tempEth = value.dictionaryValue["balance"]?.stringValue else {
                     return .failure(JSONParseErrors.ParseBalancesFailed)
                 }
+                ethBalance = tempEth
                 
-                ethBalance = Decimal(string: tempEth) ?? 0.0
             } else {
                 switch decodeTokenFromBalances(symbol: key, data: value.dictionaryValue) {
                     case .success(let token): publicTokens.append(token)
@@ -46,8 +46,6 @@ class JsonDeserialization {
             }
         }
         
-        let usd = Decimal(string: USD) ?? 0.0        
-        
         return .success(
             TokenBalances(
                 transactionCount: Int(truncating: transactionCount),
@@ -56,7 +54,7 @@ class JsonDeserialization {
                     publicTokens: publicTokens,
                     ethBalance: ETHBalance(balance: ethBalance)
                 ),
-                aggValue: AggregateValue(USD: usd)
+                aggValue: AggregateValue(USD: USD)
             )
         )
     }
@@ -167,29 +165,27 @@ class JsonDeserialization {
         return .success(transactions)
     }
     
-    static func decodeSendTxResponse(json: JSON) -> Result<String, Error> {
+    static func decodeSendTxResponse(json: JSON) -> Result<Hash, Error> {
         let data = json.dictionaryValue
         
         guard let hash = data["hash"]?.stringValue else {
             return .failure(JSONParseErrors.ParseSendTxResponseFailed)
         }
         
-        return .success(hash)
+        return .success(Hash(hash: hash))
     }
     
     private static func decodeToken(json: [String: JSON]) -> Result<Token, Error> {
         
         guard let symbol = json["symbol"]?.stringValue,
-            let contractAddress = json[DecodeConstants.contractAddress]?.stringValue
-        else {
+            let contractAddress = json["contractAddress"]?.stringValue else {
             return .failure(JSONParseErrors.ParseTokenFailed)
         }
         
         guard let token = try? Token(
             symbol: symbol,
             balance: json["balance"]?.stringValue ?? "0",
-            contractAddress: Address(address: contractAddress))
-        else {
+            contractAddress: Address(address: contractAddress)) else {
             return .failure(JSONParseErrors.ParseTokenFailed)
         }
         return .success(token)
@@ -197,7 +193,7 @@ class JsonDeserialization {
     
     private static func decodeTokenFromBalances(symbol: String, data: [String:JSON]) -> Result<Token, Error> {
         guard let balance = data["balance"]?.stringValue,
-            let contractAddress = data[DecodeConstants.contractAddress]?.stringValue else {
+            let contractAddress = data["contractAddress"]?.stringValue else {
                 return .failure(JSONParseErrors.ParseBalancesFailed)
         }
                     
@@ -205,8 +201,8 @@ class JsonDeserialization {
             symbol: symbol,
             balance: balance,
             contractAddress: Address(address: contractAddress)
-            ) else {
-                return .failure(JSONParseErrors.ParseBalancesFailed)
+        ) else {
+            return .failure(JSONParseErrors.ParseBalancesFailed)
         }
         
         return .success(token)

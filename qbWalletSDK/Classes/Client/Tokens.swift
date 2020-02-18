@@ -10,37 +10,19 @@
 import Foundation
 
 public struct Tokens {
-    public let privateTokens: Array<Token>
-    public let publicTokens: Array<Token>
+    public let privateTokens: [Token]
+    public let publicTokens: [Token]
     
     init(
-        privateTokens: Array<Token>,
-        publicTokens: Array<Token>
+        privateTokens: [Token],
+        publicTokens: [Token]
     ) {
         self.privateTokens = privateTokens
         self.publicTokens = publicTokens
     }
 }
 
-extension Tokens: Decodable {
-    enum StructKeys: String, CodingKey {
-        case privateTokens = "private"
-        case publicTokens = "public"
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: StructKeys.self)
-        let privateTokens = try container.decode([Token].self, forKey: .privateTokens)
-        let publicTokens = try container.decode([Token].self, forKey: .publicTokens)
-        
-        self.init(
-            privateTokens: privateTokens,
-            publicTokens: publicTokens
-        )
-    }
-}
-
-public struct Token: Decodable {
+public struct Token {
     public let symbol: String
     public let balance: String
     public let contractAddress: Address

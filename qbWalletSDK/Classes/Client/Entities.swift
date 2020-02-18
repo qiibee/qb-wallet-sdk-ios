@@ -8,7 +8,14 @@
 
 import Foundation
 
-public struct Address: Decodable {
+public struct Hash {
+    public let hash: String
+    public init(hash: String) {
+        self.hash = hash
+    }
+}
+
+public struct Address {
     public let address: String
     
     public init(address: String) throws {
@@ -43,14 +50,14 @@ public struct Mnemonic {
 }
 
 public struct Wallet {
-    public let privateKey: String
-    public let publicKey: String
-    public let mnemonic: String
+    public let privateKey: PrivateKey
+    public let publicKey: Address
+    public let mnemonic: Mnemonic
     
     public init(
-        privateKey: String,
-        publicKey: String,
-        mnemonic: String
+        privateKey: PrivateKey,
+        publicKey: Address,
+        mnemonic: Mnemonic
     ) {
         self.publicKey = publicKey
         self.privateKey = privateKey
