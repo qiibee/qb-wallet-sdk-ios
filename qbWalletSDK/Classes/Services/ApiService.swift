@@ -121,12 +121,12 @@ internal final class ApiService: HttpClient {
         fromAddress: Address,
         toAddress: Address,
         contractAddress: Address,
-        sendTokenValue: Decimal,
+        sendTokenValue: Double,
         privateKey: PrivateKey,
         responseHandler: @escaping (Result<String, Error>) -> ()
     ) -> () {
         
-        let weiValue = "\(sendTokenValue * 1000000000000000000)"
+        let weiValue = "\(sendTokenValue * pow(10, 18))"
         
         AF.request(
             "\(ApiService.QB_API)/transactions/raw",
