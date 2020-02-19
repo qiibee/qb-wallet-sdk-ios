@@ -2,8 +2,8 @@
 //  Transaction.swift
 //  WalletSDK
 //
-//  Created by Elvis on 21.01.20.
-//  Copyright © 2020 Elvis. All rights reserved.
+//  Created by qiibee on 21.01.20.
+//  Copyright © 2020 qiibee. All rights reserved.
 //
 
 import Foundation

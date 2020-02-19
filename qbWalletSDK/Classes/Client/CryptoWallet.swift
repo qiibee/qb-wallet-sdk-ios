@@ -2,8 +2,8 @@
 //  CryptoWallet.swift
 //  WalletSDK
 //
-//  Created by Elvis on 23.12.19.
-//  Copyright © 2019 Elvis. All rights reserved.
+//  Created by qiibee on 23.12.19.
+//  Copyright © 2019 qiibee. All rights reserved.
 //
 
 import Foundation
