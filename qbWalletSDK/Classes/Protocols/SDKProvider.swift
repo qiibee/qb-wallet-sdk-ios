@@ -35,7 +35,7 @@ internal protocol SDKProvider {
     static func sendTransaction(
         toAddress: Address,
         contractAddress: Address,
-        sendTokenValue: Decimal,
+        sendTokenValue: Double,
         responseHandler:  @escaping (_ result: Result<Hash, Error>) -> ()
     )
     

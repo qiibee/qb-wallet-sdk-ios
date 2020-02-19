@@ -76,7 +76,7 @@ final public class CryptoWallet: SDKProvider {
     public static func sendTransaction(
         toAddress: Address,
         contractAddress: Address, 
-        sendTokenValue: Decimal, 
+        sendTokenValue: Double,
         responseHandler: @escaping (Result<Hash, Error>) -> ()
     ) -> () {
             getRawTx(
@@ -98,7 +98,7 @@ final public class CryptoWallet: SDKProvider {
     static func getRawTx(
         toAddress: Address,
         contractAddress: Address,
-        sendTokenValue: Decimal,
+        sendTokenValue: Double,
         responseHandler: @escaping (Result<String, Error>) -> ()
     ) -> () {
         switch (StorageService.walletAddress(), StorageService.privateKey()) {

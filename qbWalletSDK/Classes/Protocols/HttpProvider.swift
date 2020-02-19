@@ -33,7 +33,7 @@ internal protocol HttpClient {
         fromAddress: Address,
         toAddress: Address,
         contractAddress: Address,
-        sendTokenValue: Decimal,
+        sendTokenValue: Double,
         privateKey: PrivateKey,
         responseHandler: @escaping (_ result: Result<String, Error>) -> ()
     )
