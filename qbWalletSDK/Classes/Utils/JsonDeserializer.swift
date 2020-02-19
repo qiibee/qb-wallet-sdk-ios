@@ -59,11 +59,11 @@ internal final class JsonDeserialization {
         )
     }
     
-    static func decodeToknes(json: JSON) -> Result<Tokens, Error> {
+    static func decodeTokens(json: JSON) -> Result<Tokens, Error> {
         let data = json.dictionaryValue
         
         guard let privateTokensData = data["private"]?.arrayValue,
-            let publicToknesData = data["public"]?.arrayValue else {
+            let publicTokensData = data["public"]?.arrayValue else {
                 return .failure(JSONParseErrors.ParseTokensFailed)
         }
         
@@ -78,7 +78,7 @@ internal final class JsonDeserialization {
         }
         
         
-        for tokenData in publicToknesData {
+        for tokenData in publicTokensData {
             switch decodeToken(json: tokenData.dictionaryValue) {
                 case .success(let token): publicTokens.append(token)
                 case .failure(let err): return .failure(err)

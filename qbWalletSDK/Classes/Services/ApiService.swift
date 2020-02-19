@@ -54,7 +54,7 @@ internal final class ApiService: HttpClient {
             .responseJSON { response in
                 switch response.result {
                     case .success(let value):
-                        responseHandler(JsonDeserialization.decodeToknes(json: JSON(value)))
+                        responseHandler(JsonDeserialization.decodeTokens(json: JSON(value)))
                     case .failure(let error):
                         responseHandler(
                             .failure(HTTPErrors.GetRequestFailed(message:
