@@ -12,19 +12,33 @@ import SwiftKeychainWrapper
 final public class CryptoWallet: SDKProvider {
     
     private init() {}
+
+    /**
+        - Returns: Result of currently stored Wallet Address or Error<WalletAddressEmpty>
+    */
     
     public static func walletAddress() -> Result<Address, Error> {
          StorageService.walletAddress()
     }
 
+    /**
+        - Returns: Result of currently stored Private Key or Error<PrivateKeyEmpty>
+    */
     public static func privateKey() -> Result<PrivateKey, Error> {
         StorageService.privateKey()
     }
 
+
+    /**
+        - Returns: Result of currently stored Mnemonic Phrase or Error
+    */
     public static func mnemonicPhrase() -> Result<Mnemonic, Error> {
         StorageService.mnemonicPhrase()
     }
 
+    /**
+        - Returns: Result of newly created Wallet or Error
+    */
     public static func createWallet() -> Result<Wallet, Error> {
         switch CryptoService.createMnemonic() {
             case .success(let mnemonic):
@@ -34,14 +48,26 @@ final public class CryptoWallet: SDKProvider {
         }
     }
 
+    /**
+        - Returns: Result of existing Wallet or Error
+    */
     public static func restoreWallet(mnemonic: Mnemonic) -> Result<Wallet, Error> {
         handleWalletCreation(mnemonic: mnemonic)
     }
 
+    /**
+        - Returns: Result of () on success, or Error
+    */
     public static func removeWallet() -> Result<(), Error> {
         StorageService.removeWallet()
     }
 
+    /**
+        Gets current balances and passes
+        
+        - Parameters:
+            - @escaping (Result<TokenBalances, Error>) -> ()
+    */
     public static func getBalances(
         responseHandler: @escaping (Result<TokenBalances, Error>) -> ()
     ) -> () {
@@ -53,6 +79,13 @@ final public class CryptoWallet: SDKProvider {
         
     }
 
+
+    /**
+        Gets current tokens
+
+        - Parameters: 
+            - @escaping (Result<Tokens, Error>) -> ()
+    */
     public static func getTokens(
         responseHandler: @escaping (Result<Tokens, Error>) -> ()
     ) -> () {
@@ -63,6 +96,13 @@ final public class CryptoWallet: SDKProvider {
         }
     }
 
+    
+    /**
+        Gets current transactions
+
+        - Parameters: 
+            - @escaping (Result<Array<Transaction>, Error>) -> ()
+    */
     public static func getTransactions(
         responseHandler: @escaping (Result<Array<Transaction>, Error>) -> ()
     ) -> () {
@@ -73,6 +113,16 @@ final public class CryptoWallet: SDKProvider {
         }
     }
     
+    
+    /**
+        Performs send transaction
+
+        - Parameters: 
+            - toAddress: Address,
+            - contractAddress: Address, 
+            - sendTokenValue: Double,
+            - responseHandler: @escaping (Result<Hash, Error>) -> ()
+    */
     public static func sendTransaction(
         toAddress: Address,
         contractAddress: Address, 
@@ -94,7 +144,14 @@ final public class CryptoWallet: SDKProvider {
                 }
             )
     }
-    
+
+     /**
+        - Parameters: 
+            - toAddress: Address,
+            - contractAddress: Address, 
+            - sendTokenValue: Double,
+            - responseHandler: @escaping (Result<String, Error>) -> ()
+    */
     static func getRawTx(
         toAddress: Address,
         contractAddress: Address,
