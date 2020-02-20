@@ -14,6 +14,8 @@ final public class CryptoWallet: SDKProvider {
     private init() {}
 
     /**
+        Get stored Wallet Address
+
         - Returns: Result of currently stored Wallet Address or Error<WalletAddressEmpty>
     */
     
@@ -22,6 +24,8 @@ final public class CryptoWallet: SDKProvider {
     }
 
     /**
+        Get stored Private Key
+
         - Returns: Result of currently stored Private Key or Error<PrivateKeyEmpty>
     */
     public static func privateKey() -> Result<PrivateKey, Error> {
@@ -30,6 +34,8 @@ final public class CryptoWallet: SDKProvider {
 
 
     /**
+        Get stored Mnemonic Phrase
+
         - Returns: Result of currently stored Mnemonic Phrase or Error
     */
     public static func mnemonicPhrase() -> Result<Mnemonic, Error> {
@@ -37,6 +43,8 @@ final public class CryptoWallet: SDKProvider {
     }
 
     /**
+        Create new Wallet
+
         - Returns: Result of newly created Wallet or Error
     */
     public static func createWallet() -> Result<Wallet, Error> {
@@ -49,6 +57,8 @@ final public class CryptoWallet: SDKProvider {
     }
 
     /**
+        Restore existing Wallet
+
         - Returns: Result of existing Wallet or Error
     */
     public static func restoreWallet(mnemonic: Mnemonic) -> Result<Wallet, Error> {
@@ -56,6 +66,8 @@ final public class CryptoWallet: SDKProvider {
     }
 
     /**
+        Remove currently stored Wallet
+
         - Returns: Result of () on success, or Error
     */
     public static func removeWallet() -> Result<(), Error> {
@@ -64,7 +76,7 @@ final public class CryptoWallet: SDKProvider {
 
     /**
         Gets current balances and passes
-        
+
         - Parameters:
             - @escaping (Result<TokenBalances, Error>) -> ()
     */
