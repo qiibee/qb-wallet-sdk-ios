@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import HDWalletKit
 
 internal protocol HttpClient {
     static func getBalances(
@@ -34,6 +35,6 @@ internal protocol HttpClient {
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Double,
-        responseHandler: @escaping (_ result: Result<String, Error>) -> ()
+        responseHandler: @escaping (_ result: Result<(EthereumRawTransaction, Int), Error>) -> ()
     )
 }

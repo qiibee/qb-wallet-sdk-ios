@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import HDWalletKit
 
 internal final class ApiService: HttpClient {
     private init() {}
@@ -122,7 +123,7 @@ internal final class ApiService: HttpClient {
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Double,
-        responseHandler: @escaping (Result<String, Error>) -> ()
+        responseHandler: @escaping (Result<(EthereumRawTransaction, Int), Error>) -> ()
     ) -> () {
         
         let weiValue = "\(sendTokenValue * pow(10, 18))"

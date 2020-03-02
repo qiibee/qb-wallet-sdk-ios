@@ -88,7 +88,7 @@ internal final class JsonDeserialization {
         return .success(Tokens(privateTokens: privateTokens, publicTokens: publicTokens))
     }
     
-    static func decodeRawTransaction(json: JSON) -> Result<String, Error> {
+    static func decodeRawTransaction(json: JSON) -> Result<(EthereumRawTransaction, Int), Error> {
         let data = json.dictionaryValue
         
         guard let txData = (data["data"]?.stringValue),
@@ -115,7 +115,7 @@ internal final class JsonDeserialization {
             data: Data(hex: txData)
         )
         
-        return .success(rawTransaction)
+        return .success((rawTransaction, chainId))
     }
     
     static func decodeTransactions(json: JSON) -> Result<[Transaction], Error> {

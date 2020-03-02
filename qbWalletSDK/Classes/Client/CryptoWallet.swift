@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftKeychainWrapper
+import HDWalletKit
 
 final public class CryptoWallet: SDKProvider {
     
@@ -147,14 +148,14 @@ final public class CryptoWallet: SDKProvider {
                 sendTokenValue: sendTokenValue,
                 responseHandler: { result in
                     switch result {
-                        case .success(let rawTx):
-                            switch signRawTx(rawTx: rawTx) {
+                        case .success(let tuple):
+                            switch signRawTx(tuple: tuple) {
                                 case .success(let signedTx):
                                     ApiService.sendSignedTransaction(
-                                        signedTx: rawTx,
+                                        signedTx: signedTx,
                                         responseHandler: responseHandler
                                     )
-                                case .failure(let err): responseHandler(err)
+                            case .failure(let err): responseHandler(.failure(err))
                             }
                         case .failure(let err): responseHandler(.failure(err))
                     }
@@ -162,9 +163,12 @@ final public class CryptoWallet: SDKProvider {
             )
     }
 
-    static func signRawTx(rawTx: String) -> Result<String, Error> {
+    static func signRawTx(tuple: (EthereumRawTransaction, Int)) -> Result<String, Error> {
         switch StorageService.privateKey() {
             case .success(let privateKey):
+                let rawTx = tuple.0
+                let chainId = tuple.1
+                
                 guard let pk = HDPrivateKey(pk: privateKey.privateKey, coin: .ethereum) else {
                     return .failure(JSONParseErrors.ParseRawTxFailed)
                 }
@@ -172,14 +176,14 @@ final public class CryptoWallet: SDKProvider {
                 let signer = EIP155Signer(chainId: chainId)
                 
                 guard let signed = try? signer.sign(
-                    rawTransaction,
+                    rawTx,
                     privateKey: pk
                 ).toHexString() else {
                     return .failure(JSONParseErrors.ParseRawTxFailed)
                 }
 
                 return .success("0x" + signed)
-            case .failure(): .failure(StorageErrors.PrivateKeyEmpty)
+            case .failure: return .failure(StorageErrors.PrivateKeyEmpty)
         }
     }
 
@@ -194,7 +198,7 @@ final public class CryptoWallet: SDKProvider {
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Double,
-        responseHandler: @escaping (Result<String, Error>) -> ()
+        responseHandler: @escaping (Result<(EthereumRawTransaction, Int), Error>) -> ()
     ) -> () {
         switch StorageService.walletAddress() {
             case .success(let address):
