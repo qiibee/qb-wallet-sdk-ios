@@ -34,7 +34,6 @@ internal protocol HttpClient {
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Double,
-        privateKey: PrivateKey,
         responseHandler: @escaping (_ result: Result<String, Error>) -> ()
     )
 }

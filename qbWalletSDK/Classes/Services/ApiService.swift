@@ -122,7 +122,6 @@ internal final class ApiService: HttpClient {
         toAddress: Address,
         contractAddress: Address,
         sendTokenValue: Double,
-        privateKey: PrivateKey,
         responseHandler: @escaping (Result<String, Error>) -> ()
     ) -> () {
         
@@ -143,10 +142,7 @@ internal final class ApiService: HttpClient {
                 switch response.result {
                     case .success(let value):
                         responseHandler(
-                            JsonDeserialization.decodeRawTransaction(
-                                json: JSON(value),
-                                privateKey: privateKey
-                            )
+                            JsonDeserialization.decodeRawTransaction(json: JSON(value))
                         )
                     case .failure(let error):
                         responseHandler(

@@ -88,7 +88,7 @@ internal final class JsonDeserialization {
         return .success(Tokens(privateTokens: privateTokens, publicTokens: publicTokens))
     }
     
-    static func decodeRawTransaction(json: JSON, privateKey: PrivateKey) -> Result<String, Error> {
+    static func decodeRawTransaction(json: JSON) -> Result<String, Error> {
         let data = json.dictionaryValue
         
         guard let txData = (data["data"]?.stringValue),
@@ -101,7 +101,6 @@ internal final class JsonDeserialization {
             return .failure(JSONParseErrors.ParseRawTxFailed)
         }
         
-        let signer = EIP155Signer(chainId: chainId)
         let fGasPrice = hexToInt(value: gasPrice)
         let fGasLimit = hexToInt(value: gasLimit)
         let fNonce = hexToInt(value: nonce)
@@ -116,18 +115,7 @@ internal final class JsonDeserialization {
             data: Data(hex: txData)
         )
         
-        guard let pk = HDPrivateKey(pk: privateKey.privateKey, coin: .ethereum) else {
-            return .failure(JSONParseErrors.ParseRawTxFailed)
-        }
-        
-        guard let signed = try? signer.sign(
-            rawTransaction,
-            privateKey: pk
-        ).toHexString() else {
-            return .failure(JSONParseErrors.ParseRawTxFailed)
-        }
-        
-        return .success("0x" + signed)
+        return .success(rawTransaction)
     }
     
     static func decodeTransactions(json: JSON) -> Result<[Transaction], Error> {

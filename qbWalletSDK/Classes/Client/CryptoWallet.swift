@@ -147,14 +147,40 @@ final public class CryptoWallet: SDKProvider {
                 sendTokenValue: sendTokenValue,
                 responseHandler: { result in
                     switch result {
-                        case .success(let rawTx): ApiService.sendSignedTransaction(
-                            signedTx: rawTx,
-                            responseHandler: responseHandler
-                        )
+                        case .success(let rawTx):
+                            switch signRawTx(rawTx: rawTx) {
+                                case .success(let signedTx):
+                                    ApiService.sendSignedTransaction(
+                                        signedTx: rawTx,
+                                        responseHandler: responseHandler
+                                    )
+                                case .failure(let err): responseHandler(err)
+                            }
                         case .failure(let err): responseHandler(.failure(err))
                     }
                 }
             )
+    }
+
+    static func signRawTx(rawTx: String) -> Result<String, Error> {
+        switch StorageService.privateKey() {
+            case .success(let privateKey):
+                guard let pk = HDPrivateKey(pk: privateKey.privateKey, coin: .ethereum) else {
+                    return .failure(JSONParseErrors.ParseRawTxFailed)
+                }
+
+                let signer = EIP155Signer(chainId: chainId)
+                
+                guard let signed = try? signer.sign(
+                    rawTransaction,
+                    privateKey: pk
+                ).toHexString() else {
+                    return .failure(JSONParseErrors.ParseRawTxFailed)
+                }
+
+                return .success("0x" + signed)
+            case .failure(): .failure(StorageErrors.PrivateKeyEmpty)
+        }
     }
 
      /**
@@ -170,14 +196,13 @@ final public class CryptoWallet: SDKProvider {
         sendTokenValue: Double,
         responseHandler: @escaping (Result<String, Error>) -> ()
     ) -> () {
-        switch (StorageService.walletAddress(), StorageService.privateKey()) {
-            case (.success(let address), .success(let privateKey)):
+        switch StorageService.walletAddress() {
+            case .success(let address):
                 ApiService.getRawTransaction(
                     fromAddress: address,
                     toAddress: toAddress,
                     contractAddress: contractAddress,
                     sendTokenValue: sendTokenValue,
-                    privateKey: privateKey,
                     responseHandler: responseHandler
                 )
             case _: responseHandler(.failure(StorageErrors.WalletAddressEmpty))
