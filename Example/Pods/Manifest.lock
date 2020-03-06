@@ -1,0 +1,43 @@
+PODS:
+  - Alamofire (5.0.2)
+  - CryptoSwift (1.0.0)
+  - HDWalletKit (0.3.6):
+    - CryptoSwift (~> 1.0.0)
+    - secp256k1.swift (~> 0.1.4)
+  - qbWalletSDK (0.1.0):
+    - Alamofire (~> 5.0.0-rc.3)
+    - HDWalletKit (= 0.3.6)
+    - SwiftKeychainWrapper
+    - SwiftyJSON (~> 4.0)
+  - secp256k1.swift (0.1.4)
+  - SwiftKeychainWrapper (3.4.0)
+  - SwiftyJSON (4.3.0)
+
+DEPENDENCIES:
+  - qbWalletSDK (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - CryptoSwift
+    - HDWalletKit
+    - secp256k1.swift
+    - SwiftKeychainWrapper
+    - SwiftyJSON
+
+EXTERNAL SOURCES:
+  qbWalletSDK:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: 3ba7a4db18b4f62c4a1c0e1cb39d7f3d52e10ada
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  HDWalletKit: 6d97a15404b2edfe3418e3dc064faa967e51dac4
+  qbWalletSDK: 8635da99dd84f51703c857b585f7640e8751beca
+  secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
+  SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
+
+PODFILE CHECKSUM: 65091bc39316052409907ab646b2ec0108378265
+
+COCOAPODS: 1.9.0
