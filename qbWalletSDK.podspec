@@ -33,6 +33,6 @@ Pod::Spec.new do |s|
 
   s.dependency 'SwiftKeychainWrapper'
   s.dependency 'Alamofire', '~> 5.0.0-rc.3'
-  s.dependency 'HDWalletKit'
+  s.dependency 'HDWalletKit', '0.3.6'
   s.dependency 'SwiftyJSON', '~> 4.0'
 end
